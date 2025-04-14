@@ -1,15 +1,18 @@
 <?php
+use Symfony\Component\Process\Process;
 
 function runBackgroundJob($class, $method, $params = [])
 {
-    $paramString = implode(',', $params);
-    $phpPath = PHP_OS_FAMILY === 'Windows' ? 'php.exe' : 'php';
+    $paramsString = implode(',', array_map('escapeshellarg', $params));
+    $php = PHP_BINARY;
+    $cmd = [
+        $php,
+        base_path('run-job.php'),
+        $class,
+        $method,
+        $paramsString
+    ];
 
-    $cmd = "$phpPath " . base_path('run-job.php') . " $class $method \"$paramString\"";
-
-    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-        pclose(popen("start /B " . $cmd, "r"));
-    } else {
-        exec($cmd . " > /dev/null &");
-    }
+    $process = new Process($cmd);
+    $process->start(); // asynchronous background execution
 }
