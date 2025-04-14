@@ -14,6 +14,7 @@ Jobs can be triggered via **CLI** or from **within Laravel code**, with built-in
 - Whitelist-based security (only approved classes/methods allowed)
 - Web dashboard to view job and error logs
 - Works on both Unix and Windows
+- Uses Symfony Process for background execution
 
 ---
 
@@ -115,6 +116,16 @@ php artisan serve
 ```
 http://localhost:8000/job-dashboard
 ```
+Dashboard shows:
+
+- Job log entries shows timestamp, class, method, status
+- Error logs (if any)
+
+---
+
+## Symfony Process (Cross-Platform)
+
+This project uses `Symfony\Component\Process\Process` for running jobs in the background. It ensures the script works on Windows, Linux, macOS
 
 ---
 
